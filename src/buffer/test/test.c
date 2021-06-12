@@ -1,11 +1,15 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
 #include "../buffer.h"
 
 #define size strlen("helloworld")
+#define MAX_PATH_SIZE 100
 
 void main(){
+	char pathname[MAX_PATH_SIZE];
+
 	VI *vi1 = (VI*)malloc(sizeof(VI));
 	VI *vi2 = (VI*)malloc(sizeof(VI));
 	VI *vi3 = (VI*)malloc(sizeof(VI));
@@ -17,8 +21,11 @@ void main(){
 	char *temp3 = (char *)malloc(size);
 	char *temp4 = (char *)malloc(size);
 	char *temp5 = (char *)malloc(size);
+	
+	getcwd(pathname, sizeof(pathname));
+	strncat(pathname, "/../../../../dbfile/buffer_test", sizeof("/../../../../dbfile/buffer_test"));
 
-	buffer_init("/root/workspace/Finch/kv/buffer/test/db.fd", 30);
+	buffer_init(pathname, 30);
 
 	buffer_put("wang", vi1);
 	buffer_put("ting", vi2);
