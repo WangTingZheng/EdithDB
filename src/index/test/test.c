@@ -1,49 +1,58 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 
-#include "../index.h"
-#include "../../queue/queue.h"
+#include "../../index/index.h"
+#include  "../../log/log.h"
+
+int index_fd;
+
+VI *get_vi(off_t offset, off_t size){
+    VI* info = (VI* )malloc(sizeof(VI));
+
+    info->offset = offset;
+    info->size   = size;
+    info->buf    = NULL;
+
+    return info;
+}
+
+void print_vi(VI *info){
+    if(info){
+        printf("offset = %jd size = %jd\n", (intmax_t)info->offset, (intmax_t)info->size);
+    } else{
+        log_append(index_fd, "index/test.c", "print_vi", "info is not exist!");
+    }
+}
 
 void main(){
-        HashTable hashtable;
-        Node *node;
+    index_fd = log_set_filename("TEST");
+    index_create("LOG");
 
-        VI *value = (VI *)malloc(sizeof(VI));
-        VI *value_temp;
-        char *buf;
+    printf("Put key-vi\n");
 
-        value->size   = 1000;
-        value->buf    = buf;
-        value->offset = 1002;
+    index_put("10", get_vi(10, 10));
+    index_put("20", get_vi(20, 20));
+    index_put("30", get_vi(30, 30));
 
-        index_init(&hashtable);
+    printf("Print vi\n");
 
-        printf("---------- Test Insert ----------\n");
-        index_insert("test1", value, &hashtable);
-        index_print(&hashtable);
+    print_vi(index_get("10"));
+    print_vi(index_get("20"));
+    print_vi(index_get("30"));
 
-        printf("---------- Test LookUp ----------\n");
-        Queue *queue = index_lookup("test1", &hashtable);
-        while(!queue_is_empty(queue)){
-			value_temp = queue_pop_vi(queue);
-			printf("size = %d\n", value_temp->size);
-        }
-     
+    printf("Delete index\n");
 
-        printf("---------- Test Remove ----------\n");
-        index_remove("test1", &hashtable);
-        index_print(&hashtable);
-        
-        Queue *queue_re = index_lookup("test1", &hashtable);
-        while(!queue_is_empty(queue_re)){
-			value_temp = queue_pop_vi(queue_re);
-			printf("size = %d\n", value_temp->size);
-        }
+    index_delete("10");
 
-        printf("---------- Test Free ----------\n");
-        index_insert("test1", value, &hashtable);
-        index_print(&hashtable);
-        printf("\n");
-        index_free(&hashtable);
-        index_print(&hashtable);
+    printf("Print vi after delete\n");
+
+    print_vi(index_get("10"));
+    print_vi(index_get("20"));
+    print_vi(index_get("30"));
+
+    printf("Index is %s empty\n", index_isEmpty()? "":"not");
+
+    printf("Index size = %d", index_size());
 }
+

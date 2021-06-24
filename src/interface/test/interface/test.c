@@ -3,24 +3,15 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include "../../interface.h"
-
-#define MAX_PATH_SIZE 100
+#include "../../../until/until.h"
 
 void main(){
 /*					 测试put和get功能            */
 	char *value = NULL;
-	char index[MAX_PATH_SIZE];
-	char buffer[MAX_PATH_SIZE];
-	
-	getcwd(index, sizeof(index));
-	getcwd(buffer, sizeof(index));
-		
-	strncat(index, "/../../../../../dbfile/index", sizeof("/../../../../../dbfile/index"));
-	strncat(buffer, "/../../../../../dbfile/buffer", sizeof("/../../../../../dbfile/buffer"));
-	
+
 	Config config;
-	config.index_path = index;
-	config.buffer_pool_path = buffer;
+	config.index_path = until_get_full_path("hashtable");
+	config.buffer_pool_path = until_get_full_path( "buffer");
 	config.buffer_pool_size = 30;
 	
 	printf("-----------interface_int-----------\n");

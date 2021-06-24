@@ -1,51 +1,45 @@
-#ifndef  __HASHTABLE_H
-#define	 __HASHTABLE_H
+#ifndef __INDEX_H
+#define __INDEX_H
+#define INDEX_ARRAY_SIZE 10
 
-#include "../type/type.h"
+typedef enum Boolean{
+	true, false
+}boolean;
+
+typedef struct _VI{
+	off_t size;
+	char* buf;
+	off_t offset;
+}VI;
 
 typedef struct _NODE Node;
 
-typedef struct _Value_Info{
-	int size;
-	char *buf;
-	OFFSET_TYPE offset;
-}VI;
-
 struct _NODE{
 	char *key;
-	VI *value;
+	VI *info;
 	Node *next;
 };
 
-typedef struct _HASHTABLE{
-	Node* array[HASHTABLE_ARRAY_SIZE];
-}HashTable;
+typedef struct _INDEX{
+	Node* array[INDEX_ARRAY_SIZE];
+}Index;
 
+typedef struct _FLUSH_NODE{
+	off_t size;
+	off_t ksize;
+	off_t offset;
+	int pos;
+}FNode;
 
-typedef struct _QUEUE_VALUE QValue;
+void     index_create();
+void     index_put(char *key, VI *info);
+VI*      index_get(char *key);
+void     index_delete(char *key);
+boolean  index_contains(char *key);
+boolean  index_isEmpty();
+int      index_size();
 
-struct _QUEUE_VALUE{
-	char *value;
-	VI *value_info;
-};
-
-typedef struct _QUEUE_NODE QNode;
- struct _QUEUE_NODE{
-	QValue value;
-	QNode *next;
-};
-
-typedef struct _QUEUE{
-	QNode *front;
-	QNode *rear;
-}Queue;
-
-void index_init(HashTable *hashtable);
-void index_insert(const char *key, VI *value, HashTable *hashtable);
-void index_remove(char *key, HashTable *hashtable);
-Queue* index_lookup(const char *key, HashTable *hashtable);
-void index_print(HashTable *hashtable);
-void index_free(HashTable *hashtable);
-
+void     index_set_path(char *path);
+void     index_persis();
+void     index_load();
 #endif
-

@@ -4,6 +4,7 @@ project(sync)
 
 set(SRC 
 ${PROJECT_SOURCE_DIR}/../sync.c
+${PROJECT_SOURCE_DIR}/../../until/until.c
 ${PROJECT_SOURCE_DIR}/test.c
 )
 

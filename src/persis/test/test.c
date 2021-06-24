@@ -8,7 +8,7 @@ void main(){
 	HashTable hashtable_new;
     VI value;
     
-    persis_sync_init("/root/workspace/Finch/kv/dbfile/htsync.fd");
+    persis_sync_init("/root/workspace/Finch/kv/dbfile/htsync.persis_fd");
     
 	index_init(&hashtable);
 	index_init(&hashtable_new);

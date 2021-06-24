@@ -35,6 +35,8 @@ Node *FlushNodeToNode(FNode *fnode, char *key){
 	node->key   = key;
 	node->value = value_info;
 	node->next  = NULL;
+	
+	return node;
 }
 
 char *FlushNodeToChar(FNode *fnode){
@@ -170,7 +172,7 @@ void persis_sync_load(HashTable *hashtable){
 /******/
 void test_offset(){
 	OFFSET_TYPE offset;
-	persis_sync_init("/root/workspace/Finch/kv/hashtable_sync/hashtable.fd");
+	persis_sync_init("/root/workspace/Finch/kv/hashtable_sync/hashtable.persis_fd");
 	hashtable_sync_save_offset(1000);
 	offset = hashtable_sync_load_offset();
 	printf("%lld\n", offset);
@@ -204,7 +206,7 @@ void test_node_sync(){
 	node->key = "test";
 	node->next = NULL;
 	
-	persis_sync_init("/root/workspace/Finch/kv/hashtable_sync/hashtable.fd");
+	persis_sync_init("/root/workspace/Finch/kv/hashtable_sync/hashtable.persis_fd");
 	hashtable_sync_save_node(node, 1);
 	node_temp = hashtable_sync_load_node(OFFSET_TYPE_SIZE);
 	

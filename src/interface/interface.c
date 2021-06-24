@@ -7,7 +7,6 @@
 #include "../index/index.h"
 #include "../persis/persis.h"
 
-
 HashTable hashtable;
 
 void interface_init(Config config){

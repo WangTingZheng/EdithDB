@@ -29,7 +29,7 @@ int sync_read(int fd, char *mem, int size, long long offset){
 	char *ptr;
 
 	if(fd <= 0){
-		perror("sync.c:sync_read:fd");
+		perror("sync.c:sync_read:persis_fd");
 		return -1;
 	}
 
@@ -59,24 +59,29 @@ int sync_read(int fd, char *mem, int size, long long offset){
 	return 0;
 }
 
-int sync_write(int fd, char *mem, int size, long long offset){
-	int ret;
-	char *ptr;
-
-	ptr = mem;
-
+off_t sync_size(int fd){
+	off_t ret;
+	
 	if(fd <= 0){
-		perror("sync.c:sync_write:fd");
+		perror("sync.c:sync_write:persis_fd");
 		return -1;
 	}
-
-	ret = lseek64(fd, offset, SEEK_SET);
-
+	
+	ret = lseek64(fd, 0, SEEK_END);
+	
 	if(ret < 0){
 		perror("sync.c:sync_write:lseek64");
 		return -1;
 	}
+	
+	return ret;
+}
 
+int sync_write(int fd, char *mem, int size){
+	char *ptr;
+	ptr = mem;
+
+	sync_size(fd);
 
 	if(write(fd, ptr, size)  == -1){
 		perror("sync.c:sync_write:write");
@@ -85,6 +90,8 @@ int sync_write(int fd, char *mem, int size, long long offset){
 	
 	return 0;
 }
+
+
 
 int sync_exit(int fd){
 	close(fd);
